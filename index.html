@@ -94,21 +94,6 @@ body {
 }
 .stat-num { font-size:22px; font-weight:650; }
 .stat-label { font-size:11px; color:var(--muted); margin-top:4px; }
-.wechat-tip {
-  display:none;
-  max-width:1280px;
-  margin:0 auto 14px;
-  padding:0 40px;
-}
-.wechat-tip-inner {
-  border:1px solid rgba(234,179,8,.25);
-  background:rgba(234,179,8,.08);
-  color:#FDE68A;
-  border-radius:8px;
-  padding:12px 14px;
-  font-size:13px;
-  line-height:1.6;
-}
 
 /* CONTROLS */
 .controls {
@@ -347,7 +332,6 @@ body {
 @media (max-width: 768px) {
   .header { padding: 32px 20px 24px; }
   .stats { grid-template-columns: repeat(2, minmax(0,1fr)); padding:0 20px 14px; }
-  .wechat-tip { padding:0 20px; }
   .controls { padding: 16px 20px; align-items:stretch; }
   .search-wrap { flex-basis:100%; min-width:0; }
   .main { padding: 0 20px 40px; flex-direction: column; }
@@ -383,10 +367,6 @@ body {
     <button class="action-btn" onclick="scrollToCards()">浏览 AI友</button>
     <button class="action-btn" onclick="scrollToMap()">查看合作路径</button>
   </div>
-</div>
-
-<div class="wechat-tip" id="wechat-tip">
-  <div class="wechat-tip-inner">当前可能在微信内置浏览器中打开。若页面空白、卡顿或无法分享，请点右上角「...」选择「在浏览器打开」。部署到 GitHub Pages 后，微信可访问链接，但复杂交互仍建议外部浏览器体验更稳定。</div>
 </div>
 
 <div class="stats">
@@ -863,12 +843,6 @@ function scrollToCards() {
   document.querySelector('.controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function detectWechat() {
-  if (/micromessenger/i.test(navigator.userAgent)) {
-    document.getElementById('wechat-tip').style.display = 'block';
-  }
-}
-
 function setView(view, btn) {
   document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
@@ -887,7 +861,6 @@ function setView(view, btn) {
   }
 }
 
-detectWechat();
 updateStats();
 renderCards();
 </script>
