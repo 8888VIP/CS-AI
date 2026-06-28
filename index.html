@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080A10">
+<meta name="description" content="长沙大泽湖 AI 线下圈子名片墙与合作图谱，快速查看 AI友能力、需求与可合作路径。">
+<title>大泽湖 AI 圈子 · 名片墙 & 合作图谱</title>
+<style>
+:root {
+  --bg: #080A10;
+  --card: #0F1219;
+  --card-hover: #141820;
+  --border: rgba(255,255,255,0.06);
+  --border-hover: rgba(255,255,255,0.14);
+  --text: #E8EAF0;
+  --muted: #6B7080;
+  --subtle: #3A3D4A;
+  --c-edu: #22C55E;
+  --c-ec: #3B82F6;
+  --c-ai: #A855F7;
+  --c-content: #F97316;
+  --c-fin: #EAB308;
+  --c-prod: #14B8A6;
+  --c-law: #EC4899;
+  --c-biz: #6B7280;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background:
+    radial-gradient(circle at 20% -10%, rgba(20,184,166,.16), transparent 34%),
+    radial-gradient(circle at 85% 0%, rgba(168,85,247,.12), transparent 34%),
+    linear-gradient(180deg, #090C13 0%, var(--bg) 34%, #07080C 100%);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+.header {
+  padding: 44px 40px 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.header-eyebrow {
+  font-size: 11px;
+  letter-spacing: .14em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.header-title {
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 600;
+  letter-spacing: 0;
+  margin-bottom: 10px;
+}
+.header-sub {
+  font-size: clamp(16px, 2vw, 21px);
+  color: #D6DBE7;
+  line-height: 1.95;
+  max-width: 860px;
+  margin-top: 14px;
+  font-weight: 350;
+}
+.header-sub .muted-line { color: #9BA3B4; }
+.header-sub .highlight-line { color: #F2F5FA; }
+.hero-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+.action-btn {
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 9px 13px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.action-btn:hover { border-color: var(--border-hover); background: rgba(255,255,255,.1); }
+.stats {
+  max-width:1280px;
+  margin:0 auto;
+  padding:0 40px 18px;
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap:10px;
+}
+.stat {
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.035);
+  border-radius:8px;
+  padding:13px 14px;
+}
+.stat-num { font-size:22px; font-weight:650; }
+.stat-label { font-size:11px; color:var(--muted); margin-top:4px; }
+.wechat-tip {
+  display:none;
+  max-width:1280px;
+  margin:0 auto 14px;
+  padding:0 40px;
+}
+.wechat-tip-inner {
+  border:1px solid rgba(234,179,8,.25);
+  background:rgba(234,179,8,.08);
+  color:#FDE68A;
+  border-radius:8px;
+  padding:12px 14px;
+  font-size:13px;
+  line-height:1.6;
+}
+
+/* CONTROLS */
+.controls {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 40px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.search-wrap {
+  min-width:260px;
+  flex: 1 1 280px;
+  position: relative;
+}
+.search-input {
+  width:100%;
+  height:34px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:rgba(15,18,25,.82);
+  color:var(--text);
+  padding:0 12px;
+  outline:none;
+  font:inherit;
+  font-size:13px;
+}
+.search-input:focus { border-color:rgba(20,184,166,.55); box-shadow:0 0 0 3px rgba(20,184,166,.09); }
+.filter-pill {
+  font-size: 12px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+}
+.filter-pill:hover { border-color: var(--border-hover); color: var(--text); }
+.filter-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+.filter-pill[data-cat="edu"].active { background: var(--c-edu); border-color: var(--c-edu); color: #000; }
+.filter-pill[data-cat="ec"].active { background: var(--c-ec); border-color: var(--c-ec); }
+.filter-pill[data-cat="ai"].active { background: var(--c-ai); border-color: var(--c-ai); }
+.filter-pill[data-cat="content"].active { background: var(--c-content); border-color: var(--c-content); color: #000; }
+.filter-pill[data-cat="fin"].active { background: var(--c-fin); border-color: var(--c-fin); color: #000; }
+.filter-pill[data-cat="prod"].active { background: var(--c-prod); border-color: var(--c-prod); color: #000; }
+.filter-pill[data-cat="law"].active { background: var(--c-law); border-color: var(--c-law); }
+.view-divider { flex: 1; }
+.view-toggle { display: flex; background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.view-btn { font-size: 12px; padding: 6px 14px; background: transparent; border: none; color: var(--muted); cursor: pointer; font-family: inherit; transition: all .15s; }
+.view-btn.active { background: rgba(255,255,255,0.08); color: var(--text); }
+
+/* MAIN LAYOUT */
+.main { max-width: 1280px; margin: 0 auto; padding: 0 40px 60px; display: flex; gap: 24px; }
+
+/* GRID */
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  align-content: start;
+}
+
+/* CARD */
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,.035), transparent 42%), var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px;
+  cursor: pointer;
+  transition: all .2s;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent-color, transparent);
+  border-radius: 14px 14px 0 0;
+  transition: opacity .2s;
+  opacity: 0;
+}
+.card:hover {
+  background: var(--card-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+}
+.card:hover::before { opacity: 1; }
+.card.active-card { border-color: var(--accent-color, var(--border-hover)); background: var(--card-hover); }
+.card.active-card::before { opacity: 1; }
+.card.dimmed { opacity: .35; }
+.card.connected { border-color: var(--border-hover); }
+
+.card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+.avatar {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600;
+  flex-shrink: 0;
+  background: var(--avatar-bg, rgba(255,255,255,0.08));
+  color: var(--avatar-color, var(--text));
+}
+.card-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+.card-nick { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.cat-badge {
+  margin-left: auto;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--badge-bg);
+  color: var(--badge-color);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.card-bg { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+
+.card-row { display: flex; gap: 6px; align-items: flex-start; margin-bottom: 4px; }
+.card-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; width: 36px; flex-shrink: 0; padding-top: 1px; }
+.card-val { font-size: 11px; color: var(--text); line-height: 1.5; }
+.card-val.need { color: var(--accent-color, var(--text)); }
+
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.tag-chip {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+/* PANEL */
+.panel {
+  width: 320px;
+  flex-shrink: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  height: fit-content;
+  position: sticky;
+  top: 24px;
+  transition: all .25s;
+  display: none;
+}
+.panel.visible { display: block; }
+.panel-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 18px; line-height: 1; padding: 4px; }
+.panel-avatar {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 600;
+  margin-bottom: 12px;
+}
+.panel-name { font-size: 18px; font-weight: 600; margin-bottom: 2px; }
+.panel-cat { font-size: 11px; color: var(--muted); margin-bottom: 14px; }
+.panel-bio { font-size: 12px; color: var(--muted); line-height: 1.65; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+.panel-section-title { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.conn-chip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.conn-chip:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.03); }
+.conn-mini-avatar {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600;
+  flex-shrink: 0;
+}
+.conn-name { font-size: 12px; font-weight: 500; }
+.conn-reason { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+/* CLUSTER VIEW */
+.cluster-view { display: none; flex: 1; }
+.cluster-view.active-view { display: block; }
+.cluster-section { margin-bottom: 28px; }
+.cluster-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.cluster-dot { width: 8px; height: 8px; border-radius: 50%; }
+.cluster-title { font-size: 14px; font-weight: 600; }
+.cluster-count { font-size: 12px; color: var(--muted); }
+.cluster-cards { display: flex; flex-wrap: wrap; gap: 8px; }
+.mini-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer;
+  transition: all .15s;
+  min-width: 140px;
+}
+.mini-card:hover { border-color: var(--border-hover); background: var(--card-hover); }
+.mini-card-name { font-size: 12px; font-weight: 500; }
+.mini-card-sub { font-size: 10px; color: var(--muted); }
+
+/* COLLAB MAP */
+.collab-section { margin-top: 32px; }
+.collab-title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 14px; }
+.collab-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.collab-row:last-child { border-bottom: none; }
+.collab-icon { font-size: 16px; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+.collab-body { flex: 1; }
+.collab-heading { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+.collab-desc { font-size: 11px; color: var(--muted); line-height: 1.6; }
+.collab-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.collab-chip {
+  font-size: 10px; padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all .15s;
+}
+.collab-chip:hover { background: rgba(255,255,255,0.1); }
+
+/* EMPTY */
+.empty { padding: 60px; text-align: center; color: var(--muted); font-size: 14px; }
+
+@media (max-width: 768px) {
+  .header { padding: 32px 20px 24px; }
+  .stats { grid-template-columns: repeat(2, minmax(0,1fr)); padding:0 20px 14px; }
+  .wechat-tip { padding:0 20px; }
+  .controls { padding: 16px 20px; align-items:stretch; }
+  .search-wrap { flex-basis:100%; min-width:0; }
+  .main { padding: 0 20px 40px; flex-direction: column; }
+  .panel {
+    width: 100%;
+    position: fixed;
+    left:0; right:0; bottom:0; top:auto;
+    max-height: 82vh;
+    overflow:auto;
+    border-radius: 14px 14px 0 0;
+    z-index: 20;
+    box-shadow: 0 -24px 60px rgba(0,0,0,.55);
+  }
+  .view-divider { display: none; }
+  .filter-pill { flex: 1 1 auto; }
+  .view-toggle { width:100%; }
+  .view-btn { flex:1; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">长沙大泽湖 AI 线下圈子 · 2026</div>
+  <div class="header-title">名片墙 &amp; 合作图谱</div>
+  <div class="header-sub">
+    <span class="muted-line">湘江有水，大泽有风。</span><br>
+    <span class="highlight-line">AI 让答案更快，线下让信任更真。</span><br>
+    当这些名字相遇，一张名片墙就变成了一张未来的地图。<br>
+    我们在线下相见，把一个个想法，聊成一条条路。
+  </div>
+  <div class="hero-actions">
+    <button class="action-btn" onclick="scrollToCards()">浏览 AI友</button>
+    <button class="action-btn" onclick="scrollToMap()">查看合作路径</button>
+  </div>
+</div>
+
+<div class="wechat-tip" id="wechat-tip">
+  <div class="wechat-tip-inner">当前可能在微信内置浏览器中打开。若页面空白、卡顿或无法分享，请点右上角「...」选择「在浏览器打开」。部署到 GitHub Pages 后，微信可访问链接，但复杂交互仍建议外部浏览器体验更稳定。</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="total-count">—</div><div class="stat-label">AI友</div></div>
+  <div class="stat"><div class="stat-num" id="cat-count">—</div><div class="stat-label">行业方向</div></div>
+  <div class="stat"><div class="stat-num" id="link-count">—</div><div class="stat-label">推荐连接</div></div>
+  <div class="stat"><div class="stat-num" id="path-count">—</div><div class="stat-label">合作路径</div></div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" type="search" placeholder="搜索姓名、资源、需求、行业..." oninput="setSearch(this.value)">
+  </div>
+  <button class="filter-pill active" data-cat="all" onclick="setFilter('all',this)">全部</button>
+  <button class="filter-pill" data-cat="edu" onclick="setFilter('edu',this)">🎓 教育</button>
+  <button class="filter-pill" data-cat="ec" onclick="setFilter('ec',this)">🛒 电商</button>
+  <button class="filter-pill" data-cat="ai" onclick="setFilter('ai',this)">🤖 AI技术</button>
+  <button class="filter-pill" data-cat="content" onclick="setFilter('content',this)">🎬 内容/短剧</button>
+  <button class="filter-pill" data-cat="fin" onclick="setFilter('fin',this)">💰 金融/投资</button>
+  <button class="filter-pill" data-cat="prod" onclick="setFilter('prod',this)">⚙️ 产品</button>
+  <div class="view-divider"></div>
+  <div class="view-toggle">
+    <button class="view-btn active" onclick="setView('cards',this)">名片墙</button>
+    <button class="view-btn" onclick="setView('cluster',this)">合作图谱</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="grid" id="card-grid"></div>
+  <div class="cluster-view" id="cluster-view"></div>
+  <div class="panel" id="panel">
+    <button class="panel-close" onclick="closePanel()">✕</button>
+    <div id="panel-content"></div>
+  </div>
+</div>
+
+<script>
+const CAT = {
+  edu:     { label:'教育',     color:'#22C55E', bg:'rgba(34,197,94,.12)',  dark:'#166534' },
+  ec:      { label:'电商',     color:'#3B82F6', bg:'rgba(59,130,246,.12)', dark:'#1e3a5f' },
+  ai:      { label:'AI技术',   color:'#A855F7', bg:'rgba(168,85,247,.12)', dark:'#4a1d96' },
+  content: { label:'内容/短剧',color:'#F97316', bg:'rgba(249,115,22,.12)', dark:'#7c2d12' },
+  fin:     { label:'金融/投资',color:'#EAB308', bg:'rgba(234,179,8,.12)',  dark:'#713f12' },
+  prod:    { label:'产品',     color:'#14B8A6', bg:'rgba(20,184,166,.12)', dark:'#134e4a' },
+  law:     { label:'法律',     color:'#EC4899', bg:'rgba(236,72,153,.12)', dark:'#831843' },
+  biz:     { label:'实业',     color:'#6B7280', bg:'rgba(107,114,128,.12)',dark:'#374151' },
+};
+
+const people = [
+  { id:'周少', name:'周少', nick:'', cats:['content','ai'],
+    avatar:'周', bg:'美术/动画出身，完美世界游戏公司，AI绘画/漫剧创作者，全平台40万粉',
+    provides:'AI内容创作、AI绘画、自媒体流量',
+    needs:'各行业资源链接',
+    connects:['易特','冯立松','李敏','HR姐','钟瑞','王佳'] },
+
+  { id:'冯金成', name:'冯金成', nick:'', cats:['ai','biz'],
+    avatar:'冯', bg:'深圳企业系统/ERP开发，AI企业落地服务，1-2家企业在进行前期落地',
+    provides:'AI企业落地方案、系统开发',
+    needs:'有流量/短视频特长的合作伙伴',
+    connects:['黄骏','郑修豪','刘响亮','王聪','李萍','陈斯达'] },
+
+  { id:'HR姐', name:'HR姐', nick:'', cats:['content','ec'],
+    avatar:'HR', bg:'长沙头部小游戏公司（国内50%+ 微信小游戏），布局AIGC出海，HR背景',
+    provides:'游戏公司流量资源、AIGC出海渠道',
+    needs:'AI剧内容/制作团队',
+    connects:['易特','钟瑞','周少','冯立松'] },
+
+  { id:'韩力', name:'韩力', nick:'', cats:['ec'],
+    avatar:'韩', bg:'东南亚外贸电商6年，深圳/长沙，做服装类目',
+    provides:'东南亚电商选品经验',
+    needs:'AI重构商业模式和工作方式',
+    connects:['Snow','黄捷','李萍','冯立松'] },
+
+  { id:'龙晶莹', name:'龙晶莹', nick:'', cats:['law','ai'],
+    avatar:'龙', bg:'诉讼律师，已将AI深度融入工作流，自学低代码/Python',
+    provides:'法律专业知识、AI在法律行业的应用经验',
+    needs:'更高维度的AI应用交流',
+    connects:['狄博','陈文龙','王聪','陈斯达'] },
+
+  { id:'冯立松', name:'冯立松', nick:'', cats:['content','ec'],
+    avatar:'冯', bg:'前淘宝电商，AI漫剧制作中，自写pandas脚本',
+    provides:'AI漫剧制作、电商经验',
+    needs:'提示词技巧和AI工作流',
+    connects:['周少','易特','黄骏','Snow','王佳'] },
+
+  { id:'杨硕果', name:'杨硕果', nick:'', cats:['edu'],
+    avatar:'杨', bg:'学历教育行业',
+    provides:'教育资源和学员渠道',
+    needs:'AI获客方法',
+    connects:['王聪','黄骏','郑修豪','李奇'] },
+
+  { id:'李奇', name:'李奇', nick:'', cats:['edu'],
+    avatar:'李', bg:'教育行业10年+，邵阳，做学历规划，认为教育比游戏更有意义',
+    provides:'教育资源、学历规划经验',
+    needs:'认识有AI技术的年轻人',
+    connects:['王聪','黄骏','郑修豪','杨硕果','陈文龙'] },
+
+  { id:'黄骏', name:'黄骏', nick:'', cats:['edu','content'],
+    avatar:'黄', bg:'退役复学大学生，AI家教/素质教育，口播AI工作流：一天可拍100条',
+    provides:'AI口播内容工作流、AI家教经验',
+    needs:'AI项目真需求',
+    connects:['王聪','李奇','杨硕果','冯金成','郑修豪'] },
+
+  { id:'刘响亮', name:'刘响亮', nick:'', cats:['ec','content'],
+    avatar:'刘', bg:'外贸电商+视频号短剧带货，短剧城志接单已跑通',
+    provides:'短剧带货经验、外贸电商',
+    needs:'AI智能体搭建人才',
+    connects:['Snow','王聪','黄捷','易特','冯金成'] },
+
+  { id:'黄捷', name:'黄捷', nick:'', cats:['ec','content'],
+    avatar:'黄', bg:'地产营销8年→电商，AI漫剧+电商深度用Codex，已跑通SOP到SKILL环节',
+    provides:'Codex深度应用经验、电商AI工作流',
+    needs:'AI资源和落地经验交流',
+    connects:['Snow','韩力','刘响亮','冯立松'] },
+
+  { id:'王聪', name:'王聪', nick:'阿聪', cats:['ai','edu'],
+    avatar:'聪', bg:'程序员，从广州回长沙，公司做心理咨询AI教育，本次活动组织者之一',
+    provides:'程序开发、AI技术、心理教育AI产品',
+    needs:'商业资源链接、跳出程序员视角',
+    connects:['李奇','杨硕果','冯金成','黄骏','李萍','郑修豪'] },
+
+  { id:'陈斯达', name:'陈斯达', nick:'', cats:['fin','ai'],
+    avatar:'陈', bg:'金融背景，三年前已接触ChatGPT/Azure，熟悉AI行业上中下游投资逻辑',
+    provides:'AI行业分析、金融/投资对接、并购视角',
+    needs:'能落地的AI综合服务商',
+    connects:['王聪','Snow','李萍','杨太极','冯金成'] },
+
+  { id:'易特', name:'易特', nick:'', cats:['content'],
+    avatar:'易', bg:'AI剧制作者，仿真人剧（国内/海外），短剧带货，信息流广告，线上团队',
+    provides:'AI仿真人剧制作、海外版本制作、信息流广告',
+    needs:'合作内容方和分发渠道',
+    connects:['HR姐','周少','钟瑞','刘响亮','李敏'] },
+
+  { id:'夏天', name:'夏天', nick:'', cats:['fin','biz'],
+    avatar:'夏', bg:'东北人，品牌连锁，家里涉及金融/教育，研究AI量化交易',
+    provides:'量化交易研究经验、品牌连锁资源',
+    needs:'AI量化交易技术',
+    connects:['陈斯达','Snow','杨太极'] },
+
+  { id:'胡强', name:'胡强', nick:'', cats:['ai'],
+    avatar:'胡', bg:'研究生，视觉算法研究，业余做web coding和AI agent',
+    provides:'视觉算法、AI agent开发',
+    needs:'AI商业变现方向',
+    connects:['王聪','冯金成','杨太极','陈斯达'] },
+
+  { id:'郑修豪', name:'郑修豪', nick:'', cats:['edu','content'],
+    avatar:'郑', bg:'前高校辅导员，AI聚合工具系统，湘培联AI研究院合伙人，教普通人用AI',
+    provides:'AI培训体系、政企资源（湘培联）、内容工具',
+    needs:'短剧/本地生活合作资源',
+    connects:['李奇','杨硕果','冯金成','李丽','黄骏'] },
+
+  { id:'狄博', name:'狄博', nick:'十不寸', cats:['prod','ai'],
+    avatar:'狄', bg:'连续创业者/产品经理，玄学产品十几万用户150-200万变现，现做古玩AI交易',
+    provides:'产品设计、小红书获客、私域运营、小程序搭建',
+    needs:'有潜力做成产品的行业痛点',
+    connects:['龙晶莹','李丽','李萍','HR姐','陈文龙','邓蓓'] },
+
+  { id:'钟瑞', name:'钟瑞', nick:'', cats:['content'],
+    avatar:'钟', bg:'影视/TVC出身，长沙筹备漫剧，想做精品自制剧+导演作品发单平台',
+    provides:'影视内容制作、编导能力',
+    needs:'线上资源整合与内容分发',
+    connects:['HR姐','易特','周少','刘响亮'] },
+
+  { id:'李舒琪', name:'李舒琪', nick:'', cats:['ec','biz'],
+    avatar:'李', bg:'做金融公司5年，现做抖音淘宝渔具品牌（路亚），AI小白',
+    provides:'渔具品牌资源、金融行业经验',
+    needs:'行业与AI结合的入口',
+    connects:['黄骏','Snow','郑修豪','狄博'] },
+
+  { id:'李萍', name:'李萍', nick:'', cats:['ai','ec'],
+    avatar:'萍', bg:'软件产品12年（新零售/集成零售），GOI项目，帮两家公司做AI产品顾问',
+    provides:'软件规划、AI产品顾问、新零售经验',
+    needs:'AI落地合作伙伴',
+    connects:['王聪','冯金成','陈斯达','狄博','韩力'] },
+
+  { id:'李丽', name:'李丽', nick:'', cats:['content','edu'],
+    avatar:'丽', bg:'湖南教育电视台，传统媒体，服务省教育厅，受新技术冲击正寻找转型',
+    provides:'教育媒体资源、政府教育厅渠道',
+    needs:'AI+传统媒体的结合点',
+    connects:['郑修豪','狄博','王聪','陈文龙'] },
+
+  { id:'杨太极', name:'杨太极', nick:'杨先生', cats:['fin','ai'],
+    avatar:'杨', bg:'to B软件产品和解决方案，正在寻找AI领域投资标的和技术合作',
+    provides:'投资资源、to B软件经验',
+    needs:'AI技术合作者或投资标的',
+    connects:['陈斯达','胡强','王聪','李萍','夏天'] },
+
+  { id:'李敏', name:'李敏', nick:'', cats:['content','ai'],
+    avatar:'敏', bg:'知识产权方向，参与过AI漫剧图片/视频生成，想用AI写小说',
+    provides:'知识产权专业知识',
+    needs:'AI辅助创作（小说/漫剧）',
+    connects:['周少','易特','冯立松','王佳'] },
+
+  { id:'陈文龙', name:'陈文龙', nick:'', cats:['prod','fin'],
+    avatar:'陈', bg:'产品总监，大厂经历，12人产品团队，给知名投资人做过顾问，出过学术专著',
+    provides:'产品/商业分析、投资人脉、需求梳理',
+    needs:'教育/本地生活/电商中的AI落地机会',
+    connects:['狄博','龙晶莹','李丽','冯金成','李奇'] },
+
+  { id:'邓蓓', name:'邓蓓', nick:'', cats:['ec'],
+    avatar:'邓', bg:'00后，TikTok美区/东南亚电商，长沙本地生活私域运营（对接海尔售后，30万用户）',
+    provides:'TikTok电商经验、本地生活私域流量',
+    needs:'AI做客服/小程序搭建',
+    connects:['Snow','王聪','刘响亮','狄博'] },
+
+  { id:'Snow', name:'Snow', nick:'石乐', cats:['ai','ec'],
+    avatar:'S', bg:'杭州电商+技术背景，AI客服/选品/设计覆盖95%，量化交易胜率70%+',
+    provides:'AI电商全流程工作流、量化交易AI系统',
+    needs:'沉入特定行业做AI深度落地',
+    connects:['韩力','邓蓓','黄捷','刘响亮','夏天','陈斯达'] },
+
+  { id:'王佳', name:'王佳', nick:'', cats:['content','ai'],
+    avatar:'王', bg:'摄影/设计/电影海报，电商板块AI应用（自研工作流），做图形设计相关应用',
+    provides:'图形设计、视觉AI应用',
+    needs:'图形设计资源合作',
+    connects:['周少','易特','李敏','冯立松'] },
+
+  { id:'罗任敏', name:'罗任敏', nick:'', cats:['ai','content'],
+    avatar:'罗', bg:'大模型数据标注（做了2个月），现做游戏主播/解说',
+    provides:'大模型数据标注经验',
+    needs:'找好的AI信息工具，AI实际应用了解',
+    connects:['王聪','黄骏'] },
+
+  { id:'杨烘焙', name:'杨（烘焙）', nick:'', cats:['biz'],
+    avatar:'杨', bg:'烘焙实业，想用AI解决设计/图片需求',
+    provides:'烘焙行业资源',
+    needs:'AI设计和图片生成',
+    connects:['王佳','周少','狄博'] },
+
+  { id:'吴新涛', name:'吴新涛', nick:'', cats:['ai'],
+    avatar:'吴', bg:'在读研究生，想了解AI发展动态',
+    provides:'学术视角',
+    needs:'了解AI应用和发展方向',
+    connects:['王聪','胡强'] },
+
+  { id:'孙浩', name:'孙浩', nick:'', cats:['biz'],
+    avatar:'孙', bg:'医药企业工作，刚接触AI四五天，看到AI降低了设计/内容门槛',
+    provides:'医药行业资源',
+    needs:'AI基础入门和技能学习',
+    connects:['郑修豪','黄骏'] },
+];
+
+const COLLABS = [
+  { icon:'🔗', title:'技术 × 流量',
+    desc:'技术方知道怎么做，流量方知道做什么——AI落地最需要这对组合',
+    left:['王聪','胡强','冯金成'], right:['黄骏','郑修豪','刘响亮'] },
+  { icon:'🎬', title:'AI短剧全链路',
+    desc:'制作、创意、变现三环，单独做都残缺',
+    left:['易特','钟瑞'], right:['周少','冯立松','李敏','刘响亮'] },
+  { icon:'🎓', title:'教育 × AI技术',
+    desc:'教育方有学员渠道，AI方有工具，直接做AI教育产品',
+    left:['李奇','杨硕果'], right:['王聪','郑修豪','黄骏'] },
+  { icon:'🛒', title:'电商效率升级',
+    desc:'Snow已跑通AI电商覆盖95%，其他电商人可直接复用',
+    left:['Snow'], right:['韩力','邓蓓','黄捷','李舒琪','刘响亮'] },
+  { icon:'🧩', title:'产品 × 行业痛点',
+    desc:'狄博/陈文龙最擅长把行业需求做成产品',
+    left:['狄博','陈文龙'], right:['龙晶莹','李丽','李萍'] },
+  { icon:'📈', title:'投资 × 落地团队',
+    desc:'陈斯达/杨太极懂资本逻辑，落地团队正需要这种对接',
+    left:['陈斯达','杨太极','夏天'], right:['李萍','王聪','Snow','冯金成'] },
+  { icon:'📡', title:'媒体 × AI内容',
+    desc:'李丽有政府媒体渠道，郑修豪有AI培训体系，两者互补',
+    left:['李丽'], right:['郑修豪','黄骏','陈文龙'] },
+];
+
+function getCatPrimary(p) { return p.cats[0]; }
+function catStyle(cat) { return CAT[cat] || CAT.biz; }
+function avatarBg(cat) { return catStyle(cat).bg; }
+function avatarColor(cat) { return catStyle(cat).color; }
+
+let activeFilter = 'all';
+let activeCard = null;
+let searchText = '';
+
+function includesText(value, text) {
+  return String(value || '').toLowerCase().includes(text);
+}
+
+function personMatchesSearch(p) {
+  if (!searchText) return true;
+  const text = searchText.toLowerCase();
+  return includesText(p.name, text)
+    || includesText(p.nick, text)
+    || includesText(p.bg, text)
+    || includesText(p.provides, text)
+    || includesText(p.needs, text)
+    || p.cats.some(c => includesText(catStyle(c).label, text));
+}
+
+function getVisiblePeople() {
+  return people.filter(p => (activeFilter === 'all' || p.cats.includes(activeFilter)) && personMatchesSearch(p));
+}
+
+function updateStats() {
+  const catSet = new Set(people.flatMap(p => p.cats));
+  const links = people.reduce((sum, p) => sum + p.connects.length, 0);
+  document.getElementById('total-count').textContent = people.length;
+  document.getElementById('cat-count').textContent = catSet.size;
+  document.getElementById('link-count').textContent = links;
+  document.getElementById('path-count').textContent = COLLABS.length;
+}
+
+function renderCards() {
+  const grid = document.getElementById('card-grid');
+  const filtered = getVisiblePeople();
+  updateStats();
+  if (!filtered.length) { grid.innerHTML = '<div class="empty">没有找到相关人员，换个关键词试试</div>'; return; }
+  grid.innerHTML = filtered.map(p => {
+    const cat = getCatPrimary(p);
+    const cs = catStyle(cat);
+    return `<div class="card" id="card-${p.id}" 
+      style="--accent-color:${cs.color};--avatar-bg:${cs.bg};--avatar-color:${cs.color}"
+      onclick="selectCard('${p.id}')">
+      <div class="card-top">
+        <div class="avatar" style="background:${cs.bg};color:${cs.color}">${p.avatar}</div>
+        <div style="flex:1;min-width:0">
+          <div class="card-name">${p.name}${p.nick ? ` <span style="font-size:11px;font-weight:400;color:var(--muted)">${p.nick}</span>`:''}</div>
+        </div>
+        <span class="cat-badge" style="background:${cs.bg};color:${cs.color}">${cs.label}</span>
+      </div>
+      <p class="card-bg">${p.bg}</p>
+      <div class="card-row">
+        <span class="card-label">提供</span>
+        <span class="card-val">${p.provides}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">寻找</span>
+        <span class="card-val need">${p.needs}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectCard(id) {
+  const p = people.find(x => x.id === id);
+  if (!p) return;
+  activeCard = id;
+
+  document.querySelectorAll('.card').forEach(c => {
+    c.classList.remove('active-card','connected','dimmed');
+  });
+
+  const el = document.getElementById('card-'+id);
+  if (el) el.classList.add('active-card');
+
+  p.connects.forEach(cid => {
+    const cel = document.getElementById('card-'+cid);
+    if (cel) cel.classList.add('connected');
+  });
+
+  document.querySelectorAll('.card').forEach(c => {
+    if (!c.classList.contains('active-card') && !c.classList.contains('connected')) {
+      c.classList.add('dimmed');
+    }
+  });
+
+  renderPanel(p);
+  document.getElementById('panel').classList.add('visible');
+}
+
+function renderPanel(p) {
+  const cat = getCatPrimary(p);
+  const cs = catStyle(cat);
+  const connPeople = p.connects.map(cid => people.find(x => x.id === cid)).filter(Boolean);
+
+  const canHelp = connPeople.filter(c => {
+    return c.needs && p.provides && c.needs.split('、').some(n => p.provides.toLowerCase().includes(n.toLowerCase().slice(0,4)));
+  });
+  const needsHelp = connPeople.filter(c => !canHelp.includes(c));
+
+  document.getElementById('panel-content').innerHTML = `
+    <div class="panel-avatar" style="background:${cs.bg};color:${cs.color}">${p.avatar}</div>
+    <div class="panel-name">${p.name}${p.nick?` <span style="font-size:13px;font-weight:400;color:var(--muted)">${p.nick}</span>`:''}</div>
+    <div class="panel-cat">${p.cats.map(c=>catStyle(c).label).join(' · ')}</div>
+    <div class="panel-bio">${p.bg}</div>
+    <div style="margin-bottom:6px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--border)">
+      <div class="panel-section-title" style="margin-bottom:4px">他/她可以提供</div>
+      <div style="font-size:12px;color:${cs.color}">${p.provides}</div>
+    </div>
+    <div style="margin-bottom:16px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--border)">
+      <div class="panel-section-title" style="margin-bottom:4px">他/她正在寻找</div>
+      <div style="font-size:12px;color:var(--muted)">${p.needs}</div>
+    </div>
+    <div class="panel-section-title">推荐认识的人（${connPeople.length}）</div>
+    ${connPeople.map(c => {
+      const cc = catStyle(getCatPrimary(c));
+      return `<div class="conn-chip" onclick="selectCard('${c.id}')">
+        <div class="conn-mini-avatar" style="background:${cc.bg};color:${cc.color}">${c.avatar}</div>
+        <div>
+          <div class="conn-name">${c.name}</div>
+          <div class="conn-reason">${c.provides.split('、')[0]}</div>
+        </div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function closePanel() {
+  document.getElementById('panel').classList.remove('visible');
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('active-card','connected','dimmed'));
+  activeCard = null;
+}
+
+function renderCluster() {
+  const catGroups = {};
+  people.forEach(p => {
+    const cat = getCatPrimary(p);
+    if (!catGroups[cat]) catGroups[cat] = [];
+    catGroups[cat].push(p);
+  });
+
+  let html = '';
+  Object.entries(catGroups).forEach(([cat, ps]) => {
+    const cs = catStyle(cat);
+    html += `<div class="cluster-section">
+      <div class="cluster-header">
+        <div class="cluster-dot" style="background:${cs.color}"></div>
+        <div class="cluster-title">${cs.label}</div>
+        <div class="cluster-count">${ps.length}人</div>
+      </div>
+      <div class="cluster-cards">
+        ${ps.map(p=>`<div class="mini-card" onclick="selectCard('${p.id}');setView('cards',document.querySelector('.view-btn'))">
+          <div class="conn-mini-avatar" style="background:${cs.bg};color:${cs.color}">${p.avatar}</div>
+          <div>
+            <div class="mini-card-name">${p.name}</div>
+            <div class="mini-card-sub">${p.provides.split('、')[0]}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  });
+
+  html += `<div class="collab-section">
+    <div class="collab-title">合作路径</div>
+    ${COLLABS.map(c=>`<div class="collab-row">
+      <div class="collab-icon">${c.icon}</div>
+      <div class="collab-body">
+        <div class="collab-heading">${c.title}</div>
+        <div class="collab-desc">${c.desc}</div>
+        <div class="collab-chips">
+          ${c.left.map(n=>`<span class="collab-chip" onclick="selectCard('${n}');setView('cards',document.querySelectorAll('.view-btn')[0])">${n}</span>`).join('')}
+          <span style="font-size:10px;color:var(--muted);align-self:center">↔</span>
+          ${c.right.map(n=>`<span class="collab-chip" onclick="selectCard('${n}');setView('cards',document.querySelectorAll('.view-btn')[0])">${n}</span>`).join('')}
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+
+  document.getElementById('cluster-view').innerHTML = html;
+}
+
+function setFilter(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  closePanel();
+  renderCards();
+}
+
+function setSearch(value) {
+  searchText = value.trim();
+  closePanel();
+  renderCards();
+}
+
+function scrollToMap() {
+  setView('cluster', document.querySelectorAll('.view-btn')[1]);
+  document.getElementById('cluster-view').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function scrollToCards() {
+  setView('cards', document.querySelectorAll('.view-btn')[0]);
+  document.querySelector('.controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function detectWechat() {
+  if (/micromessenger/i.test(navigator.userAgent)) {
+    document.getElementById('wechat-tip').style.display = 'block';
+  }
+}
+
+function setView(view, btn) {
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const grid = document.getElementById('card-grid');
+  const cluster = document.getElementById('cluster-view');
+  const panel = document.getElementById('panel');
+  if (view === 'cards') {
+    grid.style.display = '';
+    cluster.style.display = 'none';
+    panel.style.display = activeCard ? '' : 'none';
+  } else {
+    grid.style.display = 'none';
+    cluster.style.display = 'block';
+    panel.style.display = 'none';
+    renderCluster();
+  }
+}
+
+detectWechat();
+updateStats();
+renderCards();
+</script>
+</body>
+</html>
